@@ -1,0 +1,35 @@
+
+router.post("/signin", (req, res) => {});
+router.post("/signup", (req, res) => {
+  User.findOne({ email: req.body.email }).exec((error, user) => {
+    // Check the email already exits or not
+    if (user)
+      return res.status(400).json({
+        message: "User already registered found",
+      });
+
+    // if email not exits create a new user
+    const { FirstName, LastName, email, password, MobileNumber } = req.body;
+
+    const _user = new User({
+      FirstName,
+      LastName,
+      email,
+      password,
+      MobileNumber,
+      username: Math.random().toString(),
+    });
+    _user.save((error, user) => {
+      if (error) {
+        return res.status(400).json({
+          message: "Something went wrong",
+        });
+      }
+      if (user) {
+        return res.status(201).json({
+          user: data,
+        });
+      }
+    });
+  });
+});

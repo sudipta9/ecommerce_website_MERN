@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 // importing all routes to the server
 const authRoutes = require("./routes/auth");
+const adminAuthRoutes = require("./routes/admin/auth");
 
 // creating the Database
 mongoose
@@ -23,6 +24,7 @@ mongoose
 
 app.use(bodyParser());
 app.use("/api", authRoutes);
+app.use("/api", adminAuthRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`[+] The server is running on ${process.env.PORT}`);

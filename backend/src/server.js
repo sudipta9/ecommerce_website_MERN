@@ -1,7 +1,6 @@
 const express = require(`express`);
 const env = require("dotenv").config(); //configure the env variable
 const app = express();
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 // importing all routes to the server
@@ -22,7 +21,7 @@ mongoose
     console.log(`[+] Database Connected`);
   });
 
-app.use(bodyParser());
+app.use(express.json());
 app.use("/api", authRoutes);
 app.use("/api", adminAuthRoutes);
 

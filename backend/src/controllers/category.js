@@ -1,6 +1,25 @@
 const category = require("../models/category");
 const slugify = require("slugify");
 
+// recursive function to organize parent and child categories
+createCategories = (categories, parentId = null) => {
+  const categoryList = [];
+  let category;
+  if (parentId == null) {
+    category = categories.filter((cat) => cat.parentId == undefined);
+  } else {
+    category = categories.filter((cat) => cat.parentId == parentId);
+  }
+  for (let cate of category)
+    categoryList.push({
+      _id: cate._id,
+      name: cate.name,
+      slug: cate.slug,
+      children: createCategories(categories, cate._id),
+    });
+  return categoryList;
+};
+
 // function to add category
 exports.addCategory = (req, res) => {
   const categoryObject = {
@@ -22,6 +41,7 @@ exports.addCategory = (req, res) => {
   });
 };
 
+// fetch the categories
 exports.getCategories = (req, res) => {
   category.find({}).exec((error, categories) => {
     if (error)
@@ -29,8 +49,9 @@ exports.getCategories = (req, res) => {
         error: error,
       });
     if (categories) {
+      const categoryList = createCategories(categories);
       res.status(200).json({
-        categories,
+        categoryList,
       });
     }
   });

@@ -1,4 +1,8 @@
 {
     "explorer.compactFolders": false,
-    "explorer.confirmDragAndDrop": false
+    "explorer.confirmDragAndDrop": false,
+    "cSpell.words": [
+        "fieldname",
+        "originalname"
+    ]
 }

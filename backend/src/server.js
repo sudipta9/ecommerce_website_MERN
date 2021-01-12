@@ -8,6 +8,7 @@ const authRoutes = require("./routes/auth");
 const adminAuthRoutes = require("./routes/admin/auth");
 const categoryRoutes = require("./routes/category");
 const productRoutes = require("./routes/products");
+const cartRoutes = require("./routes/cart");
 // creating the Database
 mongoose
   .connect(
@@ -16,6 +17,7 @@ mongoose
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
+      // useFindAndModify: false,
     }
   )
   .then(() => {
@@ -27,6 +29,7 @@ app.use("/api", authRoutes);
 app.use("/api", adminAuthRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", productRoutes);
+app.use("/api", cartRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`[+] The server is running on ${process.env.PORT}`);

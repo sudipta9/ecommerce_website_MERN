@@ -53,7 +53,7 @@ module.exports.signin = (req, res) => {
       if (user.authenticate(req.body.password)) {
         // generate login token
         const token = jwt.sign(
-          { _id: user._id },
+          { _id: user._id, role: user.role },
           process.env.JSONWEBTOKEN_SECRET_KEY,
           { expiresIn: "1d" }
         );

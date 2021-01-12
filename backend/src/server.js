@@ -2,6 +2,7 @@ const express = require(`express`);
 const env = require("dotenv").config(); //configure the env variable
 const app = express();
 const mongoose = require("mongoose");
+const path = require("path");
 
 // importing all routes to the server
 const authRoutes = require("./routes/auth");
@@ -25,6 +26,7 @@ mongoose
   });
 
 app.use(express.json());
+app.use("/public", express.static(path.join(__dirname, "uploads")));
 app.use("/api", authRoutes);
 app.use("/api", adminAuthRoutes);
 app.use("/api", categoryRoutes);

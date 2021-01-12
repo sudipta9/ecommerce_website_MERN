@@ -26,6 +26,12 @@ exports.addCategory = (req, res) => {
     name: req.body.name,
     slug: slugify(req.body.name),
   };
+
+  if (req.file) {
+    categoryObject.categoryImage =
+      `${process.env.API}/public/` + req.file.filename;
+  }
+
   if (req.body.parentId) {
     categoryObject.parentId = req.body.parentId;
   }

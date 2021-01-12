@@ -2,6 +2,7 @@
     "explorer.compactFolders": false,
     "explorer.confirmDragAndDrop": false,
     "cSpell.words": [
+        "SECRETKEY",
         "fieldname",
         "originalname"
     ]

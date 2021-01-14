@@ -55,7 +55,7 @@ module.exports.signin = (req, res) => {
         const token = jwt.sign(
           { _id: user._id, role: user.role },
           process.env.JSONWEBTOKEN_SECRET_KEY,
-          { expiresIn: "1d" }
+          { expiresIn: "1h" }
         );
 
         const { _id, firstName, lastName, email, role, fullName } = user;

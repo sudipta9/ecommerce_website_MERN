@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { login, isUserLoggedIn } from "../../actions";
+import { login } from "../../actions";
 import Layout from "../../components/Layouts";
 import Input from "../../components/UI/Input";
 
@@ -13,10 +13,6 @@ const Signin = (props) => {
   const auth = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!auth.authenticate) dispatch(isUserLoggedIn());
-  }, []);
 
   const userLogin = (e) => {
     e.preventDefault();
@@ -39,7 +35,6 @@ const Signin = (props) => {
             <Col md={{ span: 6, offset: 3 }}>
               <Form onSubmit={userLogin}>
                 <Input
-                  fromId="formBasicEmail"
                   label="Email Address"
                   type="email"
                   placeholder="someone@test.com"
@@ -49,7 +44,6 @@ const Signin = (props) => {
                 />
 
                 <Input
-                  fromId="formBasicPassword"
                   label="Password"
                   type="password"
                   placeholder="Password"

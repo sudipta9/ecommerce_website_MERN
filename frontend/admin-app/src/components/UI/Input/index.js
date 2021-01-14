@@ -4,7 +4,8 @@ import { FormGroup, Form } from "react-bootstrap";
 function Input(props) {
   return (
     <>
-      <FormGroup controlId={props.fromId}>
+      {/* controlId={props.fromId} */}
+      <FormGroup>
         <Form.Label>{props.label}</Form.Label>
         <Form.Control
           type={props.type}

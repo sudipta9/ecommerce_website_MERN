@@ -2,7 +2,7 @@ const User = require("../../models/user");
 const jwt = require("jsonwebtoken");
 
 // signup function
-module.exports.signup = (req, res) => {
+exports.signup = (req, res) => {
   User.findOne({
     email: req.body.email,
   }).exec((error, user) => {
@@ -40,7 +40,7 @@ module.exports.signup = (req, res) => {
 };
 
 // login function
-module.exports.signin = (req, res) => {
+exports.signin = (req, res) => {
   User.findOne({ email: req.body.email }).exec((error, user) => {
     // if some error
     if (error)
@@ -59,6 +59,7 @@ module.exports.signin = (req, res) => {
         );
 
         const { _id, firstName, lastName, email, role, fullName } = user;
+        res.cookie("token", token, { expiresIn: "1h" });
         res.status(200).json({
           token,
           user: {
@@ -91,5 +92,12 @@ module.exports.signin = (req, res) => {
         massage: "email not registered",
         error: `${error}`,
       });
+  });
+};
+
+exports.signout = (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({
+    message: "Signed out successfully",
   });
 };

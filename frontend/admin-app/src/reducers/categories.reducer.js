@@ -20,7 +20,7 @@ export default (state = initState, action) => {
     case categoryConstant.GET_CATEGORY_SUCCESS:
       state = {
         ...initState,
-        categories: action.payload.categoryList,
+        categories: action.payload.categories,
         loading: false,
       };
       break;

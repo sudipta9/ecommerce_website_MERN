@@ -9,10 +9,11 @@ export const getCategory = () => {
     const res = await axiosInstance.get("category/get-category");
     console.log(res);
 
+    const { categoryList } = res.data;
     if (res.status === 200) {
       dispatch({
         type: categoryConstant.GET_CATEGORY_SUCCESS,
-        payload: { categories: res.data },
+        payload: { categories: categoryList },
       });
     } else {
       dispatch({
@@ -20,5 +21,12 @@ export const getCategory = () => {
         payload: { error: res.data.error },
       });
     }
+  };
+};
+
+export const addCategory = (form) => {
+  return async (dispatch) => {
+    const res = axiosInstance.post("/category/create", form);
+    console.log(res);
   };
 };

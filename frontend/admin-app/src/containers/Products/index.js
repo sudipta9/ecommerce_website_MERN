@@ -32,10 +32,6 @@ const Products = (props) => {
   const [productCategoryId, setProductCategoryId] = useState("");
   const [productImages, setProductImages] = useState("");
 
-  useEffect(() => {
-    dispatch(getCategory());
-  }, []);
-
   const categoryList = (categories, options = []) => {
     for (let category of categories) {
       options.push({ name: category.name, id: category._id });
@@ -55,8 +51,10 @@ const Products = (props) => {
     form.append("price", productPrice);
     form.append("qty", productQuantity);
     form.append("description", productDescription);
-    form.append("offer", productOffer);
-    form.append("offerPrice", productOfferPrice);
+    if (productOffer !== "") {
+      form.append("offer", productOffer);
+      form.append("offerPrice", productOfferPrice);
+    }
     form.append("category", productCategoryId);
     for (let image of productImages) {
       form.append("productPicture", image);

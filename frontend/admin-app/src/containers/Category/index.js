@@ -15,7 +15,7 @@ import {
 } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { useDispatch, useSelector } from "react-redux";
-import { addCategory, getCategory } from "../../actions/categories.action";
+import { addCategory } from "../../actions/categories.action";
 import Layout from "../../components/Layouts";
 import Input from "../../components/UI/Input";
 
@@ -27,10 +27,6 @@ function Category(props) {
   const [parentCategoryId, setParentCategoryId] = useState("");
   const [categoryImage, setCategoryImage] = useState("");
   const [fileName, setFileName] = useState("Select file");
-
-  useEffect(() => {
-    dispatch(getCategory());
-  }, []);
 
   const renderCategories = (categories) => {
     let allCategories = [];

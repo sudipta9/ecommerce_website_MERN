@@ -60,6 +60,15 @@ const Products = (props) => {
       form.append("productPicture", image);
     }
     dispatch(addProduct(form));
+
+    setNewProductName("");
+    setProductDescription("");
+    setProductPrice("");
+    setProductOffer("");
+    setProductOfferPrice("");
+    setProductQuantity("");
+    setProductCategoryId("");
+    setProductImages("");
     // setShowModal(false)
   };
 

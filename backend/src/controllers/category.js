@@ -1,5 +1,6 @@
 const category = require("../models/category");
 const slugify = require("slugify");
+const mongoose = require("mongoose");
 
 // recursive function to organize parent and child categories
 createCategories = (categories, parentId = null) => {

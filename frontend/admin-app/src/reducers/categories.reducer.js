@@ -11,33 +11,43 @@ const initState = {
 
 const buildNewCategory = (parentId, categories, category) => {
   let myCategories = [];
+  if (!parentId) {
+    return [
+      ...categories,
+      {
+        _id: category._id,
+        name: category.name,
+        slug: category.slug,
+        children: [],
+      },
+    ];
+  }
   for (let cat of categories) {
     if (cat._id == parentId) {
       myCategories.push({
         ...cat,
-        children:
-          cat.children && cat.children.length > 0
-            ? buildNewCategory(
-                parentId,
-                [
-                  ...cat.children,
-                  {
-                    _id: category._id,
-                    name: category.name,
-                    slug: category.slug,
-                    parentId: category.parentId,
-                    children: category.children,
-                  },
-                ],
-                category
-              )
-            : [],
+        children: cat.children
+          ? buildNewCategory(
+              parentId,
+              [
+                ...cat.children,
+                {
+                  _id: category._id,
+                  name: category.name,
+                  slug: category.slug,
+                  parentId: category.parentId,
+                  children: category.children,
+                },
+              ],
+              category
+            )
+          : [],
       });
     } else
       myCategories.push({
         ...cat,
         children:
-          cat.children && cat.children.length > 0
+          cat.children > 0
             ? buildNewCategory(parentId, cat.children, category)
             : [],
       });

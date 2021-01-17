@@ -24,8 +24,8 @@ function Category(props) {
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState();
-  const [parentCategoryId, setParentCategoryId] = useState(undefined);
-  const [categoryImage, setCategoryImage] = useState(undefined);
+  const [parentCategoryId, setParentCategoryId] = useState("");
+  const [categoryImage, setCategoryImage] = useState("");
   const [fileName, setFileName] = useState("Select file");
 
   useEffect(() => {
@@ -58,10 +58,10 @@ function Category(props) {
   };
 
   const clearInput = () => {
-    setNewCategoryName(undefined);
-    setParentCategoryId(undefined);
+    setNewCategoryName("");
+    setParentCategoryId("");
     setFileName("Select File");
-    setCategoryImage(undefined);
+    setCategoryImage("");
   };
   const fileSelect = (e) => {
     e.preventDefault();
@@ -71,11 +71,11 @@ function Category(props) {
   const handelAddCategoryModal = (e) => {
     const form = new FormData();
     form.append("name", newCategoryName);
-    if (parentCategoryId !== undefined) {
+    if (parentCategoryId !== "") {
       form.append("parentId", parentCategoryId);
       // console.log("parentId present");
     }
-    if (categoryImage !== undefined) {
+    if (categoryImage !== "") {
       form.append("categoryImage", categoryImage);
       // console.log("file present");
     }
@@ -83,7 +83,7 @@ function Category(props) {
     dispatch(addCategory(form));
 
     clearInput();
-    // setShow(false);
+    setShow(false);
   };
   const handelShowModal = () => setShow(true);
   const handelCloseModal = () => setShow(false);
@@ -141,7 +141,7 @@ function Category(props) {
                       setParentCategoryId(e.target.value);
                     }}
                   >
-                    <option value={undefined} key={undefined}>
+                    <option value={""} key={""}>
                       Create New
                     </option>
                     {createCategoryList(category.categories).map((option) => {

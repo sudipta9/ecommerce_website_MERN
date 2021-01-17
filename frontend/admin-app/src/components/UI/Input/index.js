@@ -12,6 +12,7 @@ function Input(props) {
           placeholder={props.placeholder}
           value={props.value}
           onChange={props.onChange}
+          min={props.min}
         />
         <Form.Text className="text-muted">{props.errorMassage}</Form.Text>
       </FormGroup>

@@ -1,11 +1,12 @@
 const User = require("../../models/user");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 // signup function
 exports.signup = (req, res) => {
   User.findOne({
     email: req.body.email,
-  }).exec((error, user) => {
+  }).exec(async (error, user) => {
     // check email already exits
     if (user && user.role === "admin") {
       return res.status(400).json({
@@ -14,12 +15,15 @@ exports.signup = (req, res) => {
     }
 
     // is email not registered
-    const { firstName, lastName, email, password, userName, role } = req.body;
+    const { firstName, lastName, email, password } = req.body;
+
+    const HashPassword = await bcrypt.hash(password, 16);
+
     const _user = new User({
       firstName,
       lastName,
       email,
-      password,
+      HashPassword,
       userName: Math.random().toString(),
       role: "admin",
     });

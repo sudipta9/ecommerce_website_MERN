@@ -119,6 +119,7 @@ function Category(props) {
         header="Add New Category"
         handelAction={handelAddCategoryModal}
         action="Add Category"
+        actionButton
       >
         <Form>
           <Input

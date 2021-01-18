@@ -7,6 +7,7 @@ import {
   FormFile,
   FormGroup,
   FormLabel,
+  Image,
   Row,
   Table,
 } from "react-bootstrap";
@@ -15,11 +16,13 @@ import { addProduct } from "../../actions/products.action";
 import Layout from "../../components/Layouts";
 import Input from "../../components/UI/Input";
 import UIModal from "../../components/UI/Modal";
+import { generatePublicUrl } from "../../urlConfig";
+import "./style.css";
 
 const Products = (props) => {
   const category = useSelector((state) => state.category);
   const dispatch = useDispatch();
-  const [showModal, setShowModal] = useState(false);
+  const [showAddProductModal, setShowAddProductModal] = useState(false);
   const [newProductName, setNewProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productPrice, setProductPrice] = useState("");
@@ -28,6 +31,9 @@ const Products = (props) => {
   const [productQuantity, setProductQuantity] = useState("");
   const [productCategoryId, setProductCategoryId] = useState("");
   const [productImages, setProductImages] = useState("");
+  const [productDetail, setProductDetail] = useState(null);
+  const [showProductDetailModal, setShowProductDetailModal] = useState(false);
+  const product = useSelector((state) => state.product);
 
   const categoryList = (categories, options = []) => {
     for (let category of categories) {
@@ -53,7 +59,7 @@ const Products = (props) => {
     setProductImages("");
   };
 
-  const handelAddCategoryAction = () => {
+  const handelAddProductAction = () => {
     const form = new FormData();
     form.append("name", newProductName);
     form.append("price", productPrice);
@@ -69,83 +75,25 @@ const Products = (props) => {
     }
     dispatch(addProduct(form));
     clearInput();
-    // setShowModal(false)
+    // setShowAddProductModal(false)
   };
 
-  const showModalAction = () => setShowModal(true);
+  const showAddProductModalAction = () => setShowAddProductModal(true);
   const hideModalAction = () => {
     clearInput();
-    setShowModal(false);
+    setShowAddProductModal(false);
   };
-  return (
-    <Layout sidebar>
-      <Container>
-        <Row>
-          <Col
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "15px",
-            }}
-          >
-            <h3>Products</h3>
-            <Button variant="primary" onClick={showModalAction}>
-              Add Product
-            </Button>
-          </Col>
-        </Row>
 
-        <Table responsive="sm" style={{ marginTop: "20px" }}>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Table heading</th>
-              <th>Table heading</th>
-              <th>Table heading</th>
-              <th>Table heading</th>
-              <th>Table heading</th>
-              <th>Table heading</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-            </tr>
-          </tbody>
-        </Table>
-      </Container>
-
+  const renderAddProductModal = () => {
+    return (
       <UIModal
-        show={showModal}
+        show={showAddProductModal}
         handelClose={hideModalAction}
         size="lg"
         header="Add New Product"
-        handelAction={handelAddCategoryAction}
+        handelAction={handelAddProductAction}
         action="Add Product"
+        actionButton
       >
         <Input
           label="Product Name"
@@ -269,6 +217,143 @@ const Products = (props) => {
           </Col>
         </Row>
       </UIModal>
+    );
+  };
+
+  const handelShowProductDetailModal = (product) => {
+    setShowProductDetailModal(true);
+    setProductDetail(product);
+  };
+
+  const renderProductDetailsModal = () => {
+    if (!productDetail) return null;
+    return (
+      <UIModal
+        show={showProductDetailModal}
+        handelClose={() => {
+          setShowProductDetailModal(false);
+        }}
+        size="lg"
+        header="Product Details"
+      >
+        <Row>
+          <Col md={6} sm={6}>
+            <label className="key">Product Name</label>
+            <p className="value"> {productDetail.name} </p>
+          </Col>
+          <Col md={3} sm={6}>
+            <label className="key">Price</label>
+            <p className="value"> {productDetail.price} </p>
+          </Col>
+          <Col md={3} sm={6}>
+            <label className="key">Quantity</label>
+            <p className="value"> {productDetail.qty} </p>
+          </Col>
+          <Col md={4} sm={6}>
+            <label className="key">Category</label>
+            <p className="value"> {productDetail.category.name} </p>
+          </Col>
+          <Col md={4} sm={6}>
+            <label className="key">Offer</label>
+            <p className="value">
+              {" "}
+              {productDetail.offer ? productDetail.offer : null}{" "}
+            </p>
+          </Col>
+          <Col md={4} sm={6}>
+            <label className="key">Offer Price</label>
+            <p className="value">
+              {" "}
+              {productDetail.offer ? productDetail.offerPrice : null}{" "}
+            </p>
+          </Col>
+          <Col md={12}>
+            <label className="key">Description</label>
+            <p className="value">{productDetail.description}</p>
+          </Col>
+          <Col>
+            <label className="key">Pictures</label>
+            <Row style={{ paddingInline: "20px", textAlign: "center" }}>
+              {productDetail.productPictures.map((picture) => {
+                return (
+                  <Col
+                    sm={3}
+                    style={{
+                      textAlign: "center",
+                      maxHeight: "100px",
+                      marginBottom: "5px",
+                      maxWidth: "100px",
+                    }}
+                  >
+                    <img
+                      className="img-fluid rounded"
+                      style={{ height: "100%" }}
+                      src={generatePublicUrl(picture.img)}
+                      alt=""
+                    />
+                  </Col>
+                );
+              })}
+            </Row>
+          </Col>
+        </Row>
+      </UIModal>
+    );
+  };
+  return (
+    <Layout sidebar>
+      <Container>
+        <Row>
+          <Col
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "15px",
+            }}
+          >
+            <h3>Products</h3>
+            <Button variant="primary" onClick={showAddProductModalAction}>
+              Add Product
+            </Button>
+          </Col>
+        </Row>
+
+        <Table responsive="sm" style={{ marginTop: "20px" }}>
+          <thead>
+            <tr>
+              {/* <th>#</th> */}
+              <th>Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Offers</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            {product.products.length > 0
+              ? product.products.map((product) => {
+                  return (
+                    <tr
+                      key={product._id}
+                      onClick={() => {
+                        handelShowProductDetailModal(product);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <td>{product.name}</td>
+                      <td>{product.price}</td>
+                      <td> {product.qty} </td>
+                      <td> {product.offer} </td>
+                      <td> {product.category.name} </td>
+                    </tr>
+                  );
+                })
+              : null}
+          </tbody>
+        </Table>
+      </Container>
+      {renderAddProductModal()}
+      {renderProductDetailsModal()}
     </Layout>
   );
 };

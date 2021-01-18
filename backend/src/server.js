@@ -11,6 +11,7 @@ const adminAuthRoutes = require("./routes/admin/auth");
 const categoryRoutes = require("./routes/category");
 const productRoutes = require("./routes/products");
 const cartRoutes = require("./routes/cart");
+const initialDataRoutes = require("./routes/admin/initialData");
 // creating the Database
 mongoose
   .connect(
@@ -34,6 +35,7 @@ app.use("/api", adminAuthRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", productRoutes);
 app.use("/api", cartRoutes);
+app.use("/api", initialDataRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`[+] The server is running on ${process.env.PORT}`);

@@ -55,11 +55,11 @@ exports.signin = (req, res) => {
         const token = jwt.sign(
           { _id: user._id, role: user.role },
           process.env.JSONWEBTOKEN_SECRET_KEY,
-          { expiresIn: "1h" }
+          { expiresIn: "3d" }
         );
 
         const { _id, firstName, lastName, email, role, fullName } = user;
-        res.cookie("token", token, { expiresIn: "1h" });
+        res.cookie("token", token, { expiresIn: "3d" });
         res.status(200).json({
           token,
           user: {

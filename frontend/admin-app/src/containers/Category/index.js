@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addCategory } from "../../actions/categories.action";
 import Layout from "../../components/Layouts";
 import Input from "../../components/UI/Input";
+import UIModal from "../../components/UI/Modal";
 
 function Category(props) {
   const category = useSelector((state) => state.category);
@@ -111,67 +112,59 @@ function Category(props) {
         </Row>
       </Container>
 
-      <Modal show={show} onHide={handelCloseModal} centered size="lg">
-        <ModalHeader closeButton>Add new Category</ModalHeader>
-        <ModalBody>
-          <Form>
-            <Input
-              label="New Category Name"
-              placeholder="New Category"
-              type="text"
-              value={newCategoryName}
-              onChange={(e) => {
-                e.preventDefault();
-                setNewCategoryName(e.target.value);
-              }}
-            />
-            <Row>
-              <Col lg={6} md={12} sm={12}>
-                <FormGroup>
-                  <FormLabel>Select a Parent Category</FormLabel>
-                  <FormControl
-                    as="select"
-                    value={parentCategoryId}
-                    onChange={(e) => {
-                      e.preventDefault();
-                      setParentCategoryId(e.target.value);
-                    }}
-                  >
-                    <option value={""} key={""}>
-                      Create New
-                    </option>
-                    {createCategoryList(category.categories).map((option) => {
-                      return (
-                        <option value={option.id} key={option.id}>
-                          {option.name}
-                        </option>
-                      );
-                    })}
-                  </FormControl>
-                </FormGroup>
-              </Col>
-              <Col>
-                <FormGroup>
-                  <FormLabel>Select a File</FormLabel>
-                  <FormFile label={fileName} custom onChange={fileSelect} />
-                </FormGroup>
-              </Col>
-            </Row>
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button variant="secondary" onClick={handelCloseModal}>
-            Close
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handelAddCategoryModal}
-            style={{ paddingInline: "25px" }}
-          >
-            Add
-          </Button>
-        </ModalFooter>
-      </Modal>
+      <UIModal
+        show={show}
+        handelClose={handelCloseModal}
+        size="lg"
+        header="Add New Category"
+        handelAction={handelAddCategoryModal}
+        action="Add Category"
+      >
+        <Form>
+          <Input
+            label="New Category Name"
+            placeholder="New Category"
+            type="text"
+            value={newCategoryName}
+            onChange={(e) => {
+              e.preventDefault();
+              setNewCategoryName(e.target.value);
+            }}
+          />
+          <Row>
+            <Col lg={6} md={12} sm={12}>
+              <FormGroup>
+                <FormLabel>Select a Parent Category</FormLabel>
+                <FormControl
+                  as="select"
+                  value={parentCategoryId}
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setParentCategoryId(e.target.value);
+                  }}
+                >
+                  <option value={""} key={""}>
+                    Create New
+                  </option>
+                  {createCategoryList(category.categories).map((option) => {
+                    return (
+                      <option value={option.id} key={option.id}>
+                        {option.name}
+                      </option>
+                    );
+                  })}
+                </FormControl>
+              </FormGroup>
+            </Col>
+            <Col>
+              <FormGroup>
+                <FormLabel>Select a File</FormLabel>
+                <FormFile label={fileName} custom onChange={fileSelect} />
+              </FormGroup>
+            </Col>
+          </Row>
+        </Form>
+      </UIModal>
     </Layout>
   );
 }

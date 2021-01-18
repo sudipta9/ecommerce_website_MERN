@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Col,
@@ -7,17 +7,14 @@ import {
   FormFile,
   FormGroup,
   FormLabel,
-  Modal,
-  ModalBody,
   Row,
-  ModalFooter,
+  Table,
 } from "react-bootstrap";
-import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategory } from "../../actions/categories.action";
 import { addProduct } from "../../actions/products.action";
 import Layout from "../../components/Layouts";
 import Input from "../../components/UI/Input";
+import UIModal from "../../components/UI/Modal";
 
 const Products = (props) => {
   const category = useSelector((state) => state.category);
@@ -45,6 +42,17 @@ const Products = (props) => {
     return setProductImages([...productImages, e.target.files[0]]);
   };
 
+  const clearInput = () => {
+    setNewProductName("");
+    setProductDescription("");
+    setProductPrice("");
+    setProductOffer("");
+    setProductOfferPrice("");
+    setProductQuantity("");
+    setProductCategoryId("");
+    setProductImages("");
+  };
+
   const handelAddCategoryAction = () => {
     const form = new FormData();
     form.append("name", newProductName);
@@ -60,20 +68,15 @@ const Products = (props) => {
       form.append("productPicture", image);
     }
     dispatch(addProduct(form));
-
-    setNewProductName("");
-    setProductDescription("");
-    setProductPrice("");
-    setProductOffer("");
-    setProductOfferPrice("");
-    setProductQuantity("");
-    setProductCategoryId("");
-    setProductImages("");
+    clearInput();
     // setShowModal(false)
   };
 
   const showModalAction = () => setShowModal(true);
-  const hideModalAction = () => setShowModal(false);
+  const hideModalAction = () => {
+    clearInput();
+    setShowModal(false);
+  };
   return (
     <Layout sidebar>
       <Container>
@@ -91,145 +94,181 @@ const Products = (props) => {
             </Button>
           </Col>
         </Row>
+
+        <Table responsive="sm" style={{ marginTop: "20px" }}>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Table heading</th>
+              <th>Table heading</th>
+              <th>Table heading</th>
+              <th>Table heading</th>
+              <th>Table heading</th>
+              <th>Table heading</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+              <td>Table cell</td>
+            </tr>
+          </tbody>
+        </Table>
       </Container>
 
-      <Modal show={showModal} onHide={hideModalAction} centered size="lg">
-        <ModalHeader closeButton>
-          <h4>Add New Product</h4>
-        </ModalHeader>
+      <UIModal
+        show={showModal}
+        handelClose={hideModalAction}
+        size="lg"
+        header="Add New Product"
+        handelAction={handelAddCategoryAction}
+        action="Add Product"
+      >
+        <Input
+          label="Product Name"
+          type="text"
+          placeholder="New Product"
+          value={newProductName}
+          onChange={(e) => {
+            e.preventDefault();
+            setNewProductName(e.target.value);
+          }}
+        />
 
-        <ModalBody>
-          <Input
-            label="Product Name"
-            type="text"
-            placeholder="New Product"
-            value={newProductName}
+        <FormGroup>
+          <FormLabel>Product Description</FormLabel>
+          <textarea
+            className="form-control"
+            placeholder="Your Product description"
+            typeof="text"
+            value={productDescription}
             onChange={(e) => {
               e.preventDefault();
-              setNewProductName(e.target.value);
+              setProductDescription(e.target.value);
             }}
           />
+        </FormGroup>
 
-          <FormGroup>
-            <FormLabel>Product Description</FormLabel>
-            <textarea
-              className="form-control"
-              placeholder="Your Product description"
-              typeof="text"
-              value={productDescription}
+        <Row>
+          <Col sm={12} md={6} lg={3}>
+            <Input
+              type="number"
+              label="Price"
+              placeholder="Product Price"
+              min="0"
+              value={productPrice}
               onChange={(e) => {
                 e.preventDefault();
-                setProductDescription(e.target.value);
+                setProductPrice(e.target.value);
               }}
             />
-          </FormGroup>
-
-          <Row>
-            <Col sm={12} md={6} lg={3}>
-              <Input
-                type="number"
-                label="Price"
-                placeholder="Product Price"
-                min="0"
-                value={productPrice}
+          </Col>
+          <Col sm={12} md={6} lg={3}>
+            <Input
+              type="number"
+              label="Offer (in %)"
+              placeholder="Offer (if Available)"
+              min="0"
+              value={productOffer}
+              onChange={(e) => {
+                e.preventDefault();
+                setProductOffer(e.target.value);
+              }}
+            />
+          </Col>
+          <Col sm={12} md={6} lg={3}>
+            <Input
+              type="number"
+              label="Offer Price"
+              placeholder="Offer Price"
+              min="0"
+              value={productOfferPrice}
+              onChange={(e) => {
+                e.preventDefault();
+                setProductOfferPrice(e.target.value);
+              }}
+            />
+          </Col>
+          <Col sm={12} md={6} lg={3}>
+            <Input
+              type="Number"
+              label="Quantity"
+              placeholder="Quantity"
+              min="0"
+              value={productQuantity}
+              onChange={(e) => {
+                e.preventDefault();
+                setProductQuantity(e.target.value);
+              }}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={12} lg={6}>
+            <FormGroup>
+              <FormLabel>Product Category</FormLabel>
+              <FormControl
+                as="select"
+                value={productCategoryId}
                 onChange={(e) => {
                   e.preventDefault();
-                  setProductPrice(e.target.value);
+                  setProductCategoryId(e.target.value);
                 }}
+              >
+                <option value="" key="">
+                  Select Category
+                </option>
+                {categoryList(category.categories).map((option) => {
+                  return (
+                    <option value={option.id} key={option.id}>
+                      {option.name}
+                    </option>
+                  );
+                })}
+              </FormControl>
+            </FormGroup>
+          </Col>
+          <Col sm={12} md={12} lg={6}>
+            <FormGroup>
+              <FormLabel>Product Photo</FormLabel>
+              {/* to verify the uploads */}
+              {productImages.length > 0
+                ? productImages.map((picture) => (
+                    <div>{JSON.stringify(picture.name)}</div>
+                  ))
+                : null}
+              <FormFile
+                custom
+                label="Upload Here"
+                onChange={handelProductImages}
               />
-            </Col>
-            <Col sm={12} md={6} lg={3}>
-              <Input
-                type="number"
-                label="Offer (in %)"
-                placeholder="Offer (if Available)"
-                min="0"
-                value={productOffer}
-                onChange={(e) => {
-                  e.preventDefault();
-                  setProductOffer(e.target.value);
-                }}
-              />
-            </Col>
-            <Col sm={12} md={6} lg={3}>
-              <Input
-                type="number"
-                label="Offer Price"
-                placeholder="Offer Price"
-                min="0"
-                value={productOfferPrice}
-                onChange={(e) => {
-                  e.preventDefault();
-                  setProductOfferPrice(e.target.value);
-                }}
-              />
-            </Col>
-            <Col sm={12} md={6} lg={3}>
-              <Input
-                type="Number"
-                label="Quantity"
-                placeholder="Quantity"
-                min="0"
-                value={productQuantity}
-                onChange={(e) => {
-                  e.preventDefault();
-                  setProductQuantity(e.target.value);
-                }}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={12} md={12} lg={6}>
-              <FormGroup>
-                <FormLabel>Product Category</FormLabel>
-                <FormControl
-                  as="select"
-                  value={productCategoryId}
-                  onChange={(e) => {
-                    e.preventDefault();
-                    setProductCategoryId(e.target.value);
-                  }}
-                >
-                  <option value="" key="">
-                    Select Category
-                  </option>
-                  {categoryList(category.categories).map((option) => {
-                    return (
-                      <option value={option.id} key={option.id}>
-                        {option.name}
-                      </option>
-                    );
-                  })}
-                </FormControl>
-              </FormGroup>
-            </Col>
-            <Col sm={12} md={12} lg={6}>
-              <FormGroup>
-                <FormLabel>Product Photo</FormLabel>
-                {/* to verify the uploads */}
-                {productImages.length > 0
-                  ? productImages.map((picture) => (
-                      <div>{JSON.stringify(picture.name)}</div>
-                    ))
-                  : null}
-                <FormFile
-                  custom
-                  label="Upload Here"
-                  onChange={handelProductImages}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-        </ModalBody>
-        <ModalFooter>
-          <Button variant="secondary" onClick={hideModalAction}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handelAddCategoryAction}>
-            Add Product
-          </Button>
-        </ModalFooter>
-      </Modal>
+            </FormGroup>
+          </Col>
+        </Row>
+      </UIModal>
     </Layout>
   );
 };
